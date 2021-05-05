@@ -1,62 +1,63 @@
-import React, { Suspense, useEffect } from "react";
-import { Route, useParams, Link, useRouteMatch } from "react-router-dom";
-import HighlightedQuote from "../components/quotes/HighlightedQuote";
-import LoadingSpinner from "../components/UI/LoadingSpinner";
-import useHttp from "../hooks/use-http";
-import { getSingleQuote } from "../lib/api";
+import { MongoClient, ObjectId } from "mongodb";
+import { useState } from "react";
 
-// import Comments from "../components/comments/Comments";
-const Comments = React.lazy(() => import("../components/comments/Comments"));
-
-const QuoteDetail = () => {
-  const match = useRouteMatch();
-  const { quoteId } = useParams();
-
-  const { sendRequest, status, data: loadedQuote, error } = useHttp(
-    getSingleQuote,
-    true
-  );
-
-  useEffect(() => {
-    sendRequest(quoteId);
-  }, [sendRequest, quoteId]);
-
-  //   loading
-  if (status === "pending")
-    return (
-      <div className="centered">
-        <LoadingSpinner />
-      </div>
-    );
-  //error
-  if (error) return <p className="centered">{error}</p>;
-  //completed but no quotes
-  if (status === "completed" && !loadedQuote.text)
-    return <p>No quote found!</p>;
-
+import HighlightedQuote from "../../components/quotes/HighlightedQuote";
+import Comments from "../../components/comments/Comments";
+const QuoteDetail = props => {
+  const [showComments, setShowComments] = useState(false);
+  const toggleCommentsHandler = () => {
+    setShowComments(prevState => !prevState);
+  };
   return (
     <>
-      <HighlightedQuote text={loadedQuote.text} author={loadedQuote.author} />
-      <Route path={`${match.path}`} exact>
-        <div className="centered">
-          <Link to={`${match.url}/comments`} className="btn--flat">
-            Comments
-          </Link>
-        </div>
-      </Route>
-      <Suspense
-        fallback={
-          <div className="centered">
-            <LoadingSpinner />
-          </div>
-        }
+      <HighlightedQuote text={props.quote.text} author={props.quote.author} />
+      <button
+        onClick={toggleCommentsHandler}
+        className={`centered ${showComments ? "active" : ""}`}
       >
-        <Route path={`${match.path}/comments`}>
-          <Comments />
-        </Route>{" "}
-      </Suspense>
+        Comments
+      </button>
+      {showComments && <Comments />}
     </>
   );
 };
+
+export async function getStaticPaths() {
+  const client = await MongoClient.connect(
+    "mongodb+srv://ya:qwe123zx@cluster0.kxotm.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+  const quotesCollection = db.collection("quotes");
+  const quotes = await quotesCollection.find({}, { _id: 1 }).toArray();
+  client.close();
+
+  return {
+    fallback: "blocking",
+    paths: quotes.map(quote => ({
+      params: { quoteId: quote._id.toString() },
+    })),
+  };
+}
+export async function getStaticProps(context) {
+  const { quoteId } = context.params;
+  const client = await MongoClient.connect(
+    "mongodb+srv://ya:qwe123zx@cluster0.kxotm.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+  const quotesCollection = db.collection("quotes");
+  const quote = await quotesCollection.findOne({ _id: ObjectId(quoteId) });
+
+  client.close();
+
+  return {
+    props: {
+      quote: {
+        id: quoteId,
+        text: quote.text,
+        author: quote.author,
+      },
+    },
+  };
+}
 
 export default QuoteDetail;
