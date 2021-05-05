@@ -1,0 +1,46 @@
+.item {
+  margin: 1rem 0;
+  padding: 1rem;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  background-color: #c2e7f0;
+}
+
+.item:last-of-type {
+  border-bottom: none;
+}
+
+.item figure {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.item blockquote {
+  margin: 0;
+  text-align: left;
+  font-size: 1.5rem;
+  color: #212929;
+}
+
+.item p {
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+.item a {
+  position: absolute;
+  right: 10px;
+  bottom: 2px;
+}
+.item figcaption {
+  font-style: italic;
+  margin-top: 5px;
+  color: #566d6d;
+}
+
+@media (max-width: 500px) {
+  .item blockquote {
+    font-size: 1.2rem;
+  }
+}
