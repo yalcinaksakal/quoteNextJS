@@ -2,9 +2,13 @@ import { MongoClient } from "mongodb";
 import Head from "next/head";
 
 import QuoteList from "../components/quotes/QuoteList";
-
+import NoQuotesFound from "../components/quotes/NoQuotesFound";
 export default function Home(props) {
-  return <QuoteList quotes={props.quotes} />;
+  return props.quotes.length ? (
+    <QuoteList quotes={props.quotes} />
+  ) : (
+    <NoQuotesFound />
+  );
 }
 
 export async function getStaticProps() {

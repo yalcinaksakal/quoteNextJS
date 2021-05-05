@@ -1,5 +1,5 @@
 .noquotes {
-  height: 20rem;
+  width: 100%;
   margin: auto;
   display: flex;
   justify-content: center;
@@ -11,7 +11,19 @@
 
 .noquotes p {
   color: #262c2c;
-  font-size: 3rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
+.noquotes a {
+  border: 1px solid #008080;
+  background: transparent;
+  color: #008080;
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+.noquotes a:hover {
+  border: 1px solid #008080;
+  background: #008080;
+  color: white;
+}

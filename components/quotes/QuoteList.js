@@ -1,4 +1,5 @@
 // import { useHistory, useLocation } from "react-router";
+import { useRouter } from "next/router";
 import QuoteItem from "./QuoteItem";
 import classes from "./QuoteList.module.css";
 
@@ -13,23 +14,13 @@ const sortQuotes = (quotes, ascending) => {
 };
 
 const QuoteList = props => {
-  // const history = useHistory();
-  // const location = useLocation();
-
-  // const queryParams = new URLSearchParams(location.search);
-
-  // const isSortAscending = queryParams.get("sort") === "asc";
-  const isSortAscending = "asc";
+  const router = useRouter();
+  const isSortAscending = router.query?.sort === "asc";
   const sortedQuotes = sortQuotes(props.quotes, isSortAscending);
-
   const changeSortingHandler = () => {
-    // history.push({
-    //   pathname: location.pathname,
-    //   search: `?sort=${isSortAscending ? "desc" : "asc"}`,
-    // });
-    // history.push(
-    //   `${location.pathname}?sort=${isSortAscending ? "desc" : "asc"}`
-    // );
+    router.push(`/?sort=${isSortAscending ? "desc" : "asc"}`, undefined, {
+      shallow: true,
+    });
   };
   return (
     <>
