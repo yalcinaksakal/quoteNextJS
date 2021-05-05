@@ -1,3 +1,3 @@
+[react]
 [Next.js]
-[reduxToolkit]
 [mongodb]

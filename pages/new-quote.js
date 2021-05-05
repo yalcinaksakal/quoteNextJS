@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import QuoteForm from "../components/quotes/QuoteForm";
 import useHttp from "../hooks/use-http";
 import { addQuote } from "../lib/api";
+import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const NewQuote = () => {
   const { sendRequest, status, error } = useHttp(addQuote);
@@ -26,17 +27,19 @@ const NewQuote = () => {
     status === "completed" && !error
       ? "Successfully added"
       : `${error ? error : "Adding quote..."}`;
+
   return (
     <>
-      <QuoteForm
-        isLoading={status === "pending"}
-        onAddQuote={addQuoteHandler}
-      />
       {status ? (
-        <p style={{ textAlign: "center", color: error ? "red" : "limegreen" }}>
-          {message}
-        </p>
-      ) : null}
+        <>
+          {status === "pending" && <LoadingSpinner />}
+          <p style={{ textAlign: "center", color: error ? "red" : "#008080" }}>
+            {message}
+          </p>
+        </>
+      ) : (
+        <QuoteForm onAddQuote={addQuoteHandler} />
+      )}
     </>
   );
 };
