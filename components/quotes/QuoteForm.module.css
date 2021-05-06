@@ -21,7 +21,9 @@
   display: block;
   margin-bottom: 0.5rem;
 }
-
+.invalid {
+  background-color: rgb(243, 201, 201) !important;
+}
 .control input,
 .control textarea {
   font: inherit;
