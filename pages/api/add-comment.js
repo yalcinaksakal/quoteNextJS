@@ -8,6 +8,7 @@ async function commentHandler(req, res) {
       );
       const db = client.db();
       const commentsCollection = db.collection("comments");
+     
       await commentsCollection.insertOne(data);
       client.close();
       res.status(201).json({ ok: true, message: "Comment inserted." });
@@ -15,6 +16,7 @@ async function commentHandler(req, res) {
       res.status(500).json({ ok: false, message: error.message });
     }
   }
+  return res;
 }
 
 export default commentHandler;

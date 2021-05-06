@@ -22,31 +22,24 @@ const Comments = () => {
     sendRequest(quoteId);
   }, [sendRequest, quoteId]);
 
-  // //useCallback will prevetn infinie loop, because we are using it child component as a dependency of useEffect function
+  const addedCommentHandler = useCallback(() => {
+    sendRequest(quoteId);
+    setIsAddingComment(false);
+  }, [sendRequest, quoteId]);
 
-  // const addedCommentHandler = useCallback(() => {
-  //   sendRequest(quoteId);
-  //   setIsAddingComment(false);
-  // }, [sendRequest, quoteId]);
+  let comments;
+  //   loading
+  if (status === "pending") comments = <LoadingSpinner />;
 
-  // let comments;
-  // //   loading
-  // if (status === "pending")
-  //   comments = (
-  //     <div className="centered">
-  //       <LoadingSpinner />
-  //     </div>
-  //   );
+  //completed
+  if (status === "completed" && loadedComments && loadedComments.length > 0)
+    comments = <CommentsList comments={loadedComments} />;
 
-  // //completed
-  // if (status === "completed" && loadedComments && loadedComments.length > 0)
-  //   comments = <CommentsList comments={loadedComments} />;
-
-  // if (
-  //   status === "completed" &&
-  //   (!loadedComments || loadedComments.length === 0)
-  // )
-  //   comments = <p className="centered">No comments added yet</p>;
+  if (
+    status === "completed" &&
+    (!loadedComments || loadedComments.length === 0)
+  )
+    comments = <p>No comments added yet</p>;
 
   return (
     <section className={classes.comments}>
@@ -62,7 +55,7 @@ const Comments = () => {
           onAddedComment={addedCommentHandler}
         />
       )}
-      {/* {comments} */}
+      {comments}
     </section>
   );
 };

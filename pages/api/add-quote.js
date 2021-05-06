@@ -15,6 +15,7 @@ async function quoteHandler(req, res) {
       res.status(500).json({ ok: false, message: error.message });
     }
   }
+  return res;
 }
 
 export default quoteHandler;

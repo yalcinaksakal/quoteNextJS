@@ -1,5 +1,6 @@
 // import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 
 import Card from "../UI/Card";
 import classes from "./QuoteForm.module.css";
@@ -26,15 +27,23 @@ const QuoteForm = props => {
     setIsEntering(false);
   };
   // block rooutng if isEntering
-  // const router = useRouter();
-  // useEffect(() => {
-  //   const blockRouting = () => isEntering;
-  //   router.events.on("beforeHistoryChange", blockRouting);
+  const router = useRouter();
+  useEffect(() => {
+    console.log(isEntering);
+    const routeChangeStart = url => {
+      
+      if (isEntering) {
+        router.events.emit("routeChangeError");
+        throw "Abort route change. Please ignore this error.";
+      }
+    };
 
-  //   return () => {
-  //     router.events.off("beforeHistoryChange", blockRouting);
-  //   };
-  // }, []);
+    router.events.on("routeChangeStart", routeChangeStart);
+
+    return () => {
+      router.events.off("routeChangeStart", routeChangeStart);
+    };
+  }, [isEntering]);
 
   return (
     <Card>
