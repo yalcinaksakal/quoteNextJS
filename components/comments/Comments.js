@@ -1,4 +1,5 @@
-
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import useHttp from "../../hooks/use-http";
 import { getAllComments } from "../../lib/api";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -8,19 +9,21 @@ import CommentsList from "./CommentsList";
 import NewCommentForm from "./NewCommentForm";
 
 const Comments = () => {
-  // const [isAddingComment, setIsAddingComment] = useState(false);
-  // const { quoteId } = useParams();
-  // const startAddCommentHandler = () => {
-  //   setIsAddingComment(true);
-  // };
+  const [isAddingComment, setIsAddingComment] = useState(false);
+  const { quoteId } = useRouter().query;
 
-  // const { sendRequest, status, data: loadedComments } = useHttp(getAllComments);
+  const startAddCommentHandler = () => {
+    setIsAddingComment(true);
+  };
 
-  // useEffect(() => {
-  //   sendRequest(quoteId);
-  // }, [sendRequest, quoteId]);
+  const { sendRequest, status, data: loadedComments } = useHttp(getAllComments);
+
+  useEffect(() => {
+    sendRequest(quoteId);
+  }, [sendRequest, quoteId]);
 
   // //useCallback will prevetn infinie loop, because we are using it child component as a dependency of useEffect function
+
   // const addedCommentHandler = useCallback(() => {
   //   sendRequest(quoteId);
   //   setIsAddingComment(false);
@@ -47,9 +50,8 @@ const Comments = () => {
 
   return (
     <section className={classes.comments}>
-      Comments
-      {/* {!isAddingComment && (
-        <button className="btn" onClick={startAddCommentHandler}>
+      {!isAddingComment && (
+        <button className="centered" onClick={startAddCommentHandler}>
           Add a Comment
         </button>
       )}
@@ -60,7 +62,7 @@ const Comments = () => {
           onAddedComment={addedCommentHandler}
         />
       )}
-      {comments} */}
+      {/* {comments} */}
     </section>
   );
 };

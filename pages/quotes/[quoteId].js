@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import HighlightedQuote from "../../components/quotes/HighlightedQuote";
 import Comments from "../../components/comments/Comments";
+
 const QuoteDetail = props => {
   const [showComments, setShowComments] = useState(false);
   const toggleCommentsHandler = () => {
@@ -26,6 +27,7 @@ export async function getStaticPaths() {
   const client = await MongoClient.connect(
     "mongodb+srv://ya:qwe123zx@cluster0.kxotm.mongodb.net/meetups?retryWrites=true&w=majority"
   );
+
   const db = client.db();
   const quotesCollection = db.collection("quotes");
   const quotes = await quotesCollection.find({}, { _id: 1 }).toArray();

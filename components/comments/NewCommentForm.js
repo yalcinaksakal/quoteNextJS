@@ -39,7 +39,7 @@ const NewCommentForm = props => {
         <textarea id="comment" rows="5" ref={commentTextRef}></textarea>
       </div>
       <div className={classes.actions}>
-        <button className="btn">Add Comment</button>
+        <button className="centered">Add Comment</button>
       </div>
     </form>
   );
